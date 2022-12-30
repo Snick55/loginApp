@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="big_width">260dp</dimen>
+    <dimen name="medium_space">12dp</dimen>
+    <dimen name="large_space">30dp</dimen>
+</resources>
