@@ -10,12 +10,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val viewModel = (this.applicationContext as App).mainViewModel
-        viewModel.isSignIn()
-        viewModel.isSignIn.observe(this) {
-            val isSignIn = it
-            if (savedInstanceState == null) {
-                if (isSignIn) {
+
+
+        val isSignIn = intent.getBooleanExtra("isSignIn",false)
+
+
+            if (isSignIn) {
                     val fragment = FragmentProfile()
                     supportFragmentManager.beginTransaction()
                         .add(R.id.fragment_container, fragment)
@@ -26,10 +26,7 @@ class MainActivity : AppCompatActivity() {
                         .add(R.id.fragment_container, fragment)
                         .commit()
                 }
-            }
 
-
-        }
 
     }
 }

@@ -3,17 +3,17 @@ package com.android.loginapp.core
 import android.app.Application
 import com.android.loginapp.model.LoginRepository
 import com.android.loginapp.model.Validator
-import com.android.loginapp.presentation.MainViewModel
 import com.android.loginapp.presentation.profile.ProfileViewModel
 import com.android.loginapp.presentation.signIn.LoginViewModel
 import com.android.loginapp.presentation.signUp.SignUpViewModel
+import com.android.loginapp.presentation.splash.SplashViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
  class App : Application() {
 
     lateinit var viewModel: SignUpViewModel
-    lateinit var mainViewModel: MainViewModel
+    lateinit var splashViewModel: SplashViewModel
     lateinit var loginViewModel: LoginViewModel
     lateinit var profileViewModel: ProfileViewModel
 
@@ -27,7 +27,7 @@ import com.google.firebase.ktx.Firebase
         loginViewModel = LoginViewModel(repository)
         viewModel = SignUpViewModel(repository)
         profileViewModel = ProfileViewModel(repository)
-        mainViewModel = MainViewModel(repository)
+        splashViewModel = SplashViewModel(repository)
     }
 
 }
