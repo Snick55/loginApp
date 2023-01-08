@@ -1,22 +1,21 @@
 <resources>
     <string name="app_name">loginApp</string>
 
-    <string name="go_back">Go Back</string>
-    <string name="action_save">Save</string>
-    <string name="action_cancel">Cancel</string>
-    <string name="action_edit_profile">Edit Profile</string>
-    <string name="action_logout">Logout</string>
-    <string name="action_sign_in">Sign In</string>
-    <string name="action_create_account">Create Account</string>
     <string name="field_username">Username</string>
     <string name="field_email">Email</string>
     <string name="field_password">Password</string>
-    <string name="field_created_at">Created at</string>
-    <string name="field_repeat_password">Repeat Password</string>
     <string name="field_is_empty">Field is empty</string>
     <string name="password_mismatch">Password mismatch</string>
-    <string name="account_already_exists">Account already exists</string>
-    <string name="sign_up_success">Wow, you have created a new account. Now you can login with it.</string>
-    <string name="edit_profile_description">Right now you can edit only username</string>
     <string name="invalid_email_or_password">Invalid email or password</string>
+    <string name="password_missmatch">Password missmatch</string>
+    <string name="not_enough_chars">the password must consist of at least 6 characters</string>
+    <string name="invalid_email">invalid email</string>
+    <string name="sign_out">Sign out</string>
+    <string name="user_created">User created</string>
+    <string name="change_name">change name</string>
+    <string name="no_such_user">no such user</string>
+    <string name="enter_new_name">Enter new name</string>
+    <string name="field_repeat_password">Repeat password</string>
+    <string name="action_create_account">Create account</string>
+    <string name="action_sign_in">Sign in</string>
 </resources>
