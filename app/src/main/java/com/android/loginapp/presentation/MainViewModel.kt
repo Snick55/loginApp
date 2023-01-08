@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.loginapp.model.LoginRepository
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class MainViewModel(
     private val repository: LoginRepository
@@ -18,8 +18,8 @@ class MainViewModel(
     fun isSignIn() = viewModelScope.launch{
         try {
             _isSignIn.value = repository.isSignIn()
-        }finally {
-
+        }catch (e: Exception){
+            _isSignIn.value = false
         }
 
     }

@@ -1,15 +1,11 @@
 package com.android.loginapp.presentation.signUp
 
-import android.app.Activity
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.loginapp.R
-import com.android.loginapp.core.ResourceManager
 import com.android.loginapp.model.*
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -36,7 +32,6 @@ class SignUpViewModel(
         }
 
         override fun success() {
-            Log.d("TAG", "block SUCCESS")
             _successLiveData.value = true
             hideProgress()
 
@@ -46,7 +41,6 @@ class SignUpViewModel(
 
     fun signUp(name:String,email: String, password: String, repeatPass: String) =
         viewModelScope.launch {
-            Log.d("TAG", "SHOW PROGRESS")
             showProgress()
             try {
                 repository.signUp(name,email, password, repeatPass, callback)
@@ -82,7 +76,6 @@ class SignUpViewModel(
                 ?.copy(usernameErrorMessageRes = R.string.field_is_empty)
             Field.PASSWORD -> _state.value
                 ?.copy(passwordErrorMessageRes = R.string.field_is_empty)
-            else -> throw IllegalStateException("Unknown field")
         }
         hideProgress()
     }

@@ -1,6 +1,5 @@
 package com.android.loginapp.model
 
-import android.util.Log
 import com.android.loginapp.presentation.profile.SuccessRequestCallback
 import com.android.loginapp.presentation.signIn.LoginViewModel
 import com.android.loginapp.presentation.signUp.SignUpViewModel
@@ -40,22 +39,17 @@ interface LoginRepository {
                     }
                 }
                 .addOnFailureListener {
-                    Log.d("TAG","ERROR UPDATE REQUEST: $it")
                 }
 
         }
 
         override suspend fun signOut() {
             auth.signOut()
-            Log.d(
-                "TAG",
-                "after sign out value of currentUser = ${currentUser()},${auth.currentUser}  "
-            )
+
         }
 
         override suspend fun currentUser(): String {
             val currentUser = auth.currentUser
-            Log.d("TAG", "current email is ${currentUser?.displayName}")
             return currentUser?.displayName ?: ""
 
         }
@@ -71,12 +65,10 @@ interface LoginRepository {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        Log.d("TAG", "SIGN IN SUCCESS")
                         callback.success()
                     }
                 }
                 .addOnFailureListener {
-                    Log.d("TAG","SIGN IN EXCEPTION IS $it")
                     callback.map(it)
                 }
 
@@ -93,7 +85,6 @@ interface LoginRepository {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d("TAG", "User was Created")
                         val profileUpdate= userProfileChangeRequest {
                             displayName = name
                         }
@@ -102,7 +93,6 @@ interface LoginRepository {
                                 callback.success()
                             }
                             .addOnFailureListener {
-                            Log.d("TAG","ERROR UPDATE USER PFOFILE: $it")
                                 callback.map(it)
                             }
                     }

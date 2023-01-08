@@ -2,7 +2,6 @@ package com.android.loginapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.android.loginapp.core.App
 import com.android.loginapp.presentation.profile.FragmentProfile
 import com.android.loginapp.presentation.signIn.LoginFragment
@@ -13,27 +12,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val viewModel = (this.applicationContext as App).mainViewModel
         viewModel.isSignIn()
-        viewModel.isSignIn.observe(this){
-          val isSignIn = it
-            Log.d("TAG","isSignIn from viewModel observe = $isSignIn")
-            if (savedInstanceState == null){
-                Log.d("TAG","isSignIn = $isSignIn")
-                if (isSignIn){
+        viewModel.isSignIn.observe(this) {
+            val isSignIn = it
+            if (savedInstanceState == null) {
+                if (isSignIn) {
                     val fragment = FragmentProfile()
                     supportFragmentManager.beginTransaction()
-                        .add(R.id.fragment_container,fragment)
+                        .add(R.id.fragment_container, fragment)
                         .commit()
-
-                }else {
+                } else {
                     val fragment = LoginFragment()
                     supportFragmentManager.beginTransaction()
-                        .add(R.id.fragment_container,fragment)
+                        .add(R.id.fragment_container, fragment)
                         .commit()
                 }
-        }
-
-
-
+            }
 
 
         }

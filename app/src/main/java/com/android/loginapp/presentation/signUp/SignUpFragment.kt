@@ -1,8 +1,6 @@
 package com.android.loginapp.presentation.signUp
 
-import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,7 +66,6 @@ class SignUpFragment: Fragment() {
                 val password = passwordEditText.text.toString()
                 val name = usernameEditText.text.toString()
                 val repeatPass = repeatPasswordEditText.text.toString()
-                Log.d("TAG","VALUE FROM EDIT TEXT:$password,$email,$repeatPass")
                 viewModel.signUp(name,email,password,repeatPass)
 
 

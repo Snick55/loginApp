@@ -1,6 +1,5 @@
 package com.android.loginapp.model
 
-import android.util.Patterns
 
 interface Validator {
 

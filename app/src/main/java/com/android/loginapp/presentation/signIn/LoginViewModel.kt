@@ -1,6 +1,5 @@
 package com.android.loginapp.presentation.signIn
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +11,6 @@ import com.android.loginapp.model.Field
 import com.android.loginapp.model.LoginRepository
 import com.android.loginapp.model.NotEnoughCharsException
 import com.android.loginapp.presentation.signUp.SignUpViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -41,7 +39,6 @@ class LoginViewModel(
         }
 
         override fun success() {
-            Log.d("TAG", "block SUCCESS")
             _successLiveData.value = true
             hideProgress()
 
