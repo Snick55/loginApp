@@ -44,12 +44,6 @@ class FragmentProfile : Fragment() {
                 viewModel.changeName(it)
             }
         }
-
-        val text = "lONDon"
-        text.lowercase().apply {
-            this.first().uppercase()
-        }//london
-        text.first().uppercase()
     }
 
 
