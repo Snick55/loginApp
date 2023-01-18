@@ -33,6 +33,7 @@ class LoginViewModel(
                 is com.google.firebase.auth.FirebaseAuthInvalidUserException -> {
                     handleInvalidUserException()
                 }
+                else -> handleInvalidUserException() // TODO: make something went wrong error
 
             }
 

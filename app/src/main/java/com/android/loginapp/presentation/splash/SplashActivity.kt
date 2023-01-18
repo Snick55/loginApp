@@ -23,6 +23,7 @@ class SplashActivity : AppCompatActivity() {
             val intent = Intent(this,MainActivity::class.java)
             intent.putExtra("isSignIn",it)
             startActivity(intent)
+            finish()
         }
 
 

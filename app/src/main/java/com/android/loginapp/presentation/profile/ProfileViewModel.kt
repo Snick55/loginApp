@@ -14,7 +14,7 @@ class ProfileViewModel(
     val currentName = _currentName
 
     fun currentUser()=  viewModelScope.launch{
-        val name = repository.currentUser()
+        val name = repository.getName()
         _currentName.value = name
     }
 

@@ -10,7 +10,7 @@ interface LoginRepository {
 
     suspend fun changeName(name: String,callback: SuccessRequestCallback)
 
-    suspend fun currentUser(): String
+    suspend fun getName(): String
 
     suspend fun isSignIn(): Boolean
 
@@ -22,55 +22,37 @@ interface LoginRepository {
 
 
     class Base(
-        private val auth: FirebaseAuth,
+        private val authService: AuthService,
         private val validator: Validator
     ) : LoginRepository {
 
 
         override suspend fun changeName(name: String,callback:SuccessRequestCallback) {
-            val request = userProfileChangeRequest {
-                displayName = name
-            }
 
-            auth.currentUser!!.updateProfile(request)
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        callback.success()
-                    }
-                }
-                .addOnFailureListener {
-                }
-
+            authService.changeName(name,callback)
         }
 
         override suspend fun signOut() {
-            auth.signOut()
-
+            authService.signOut()
         }
 
-        override suspend fun currentUser(): String {
-            val currentUser = auth.currentUser
-            return currentUser?.displayName ?: ""
+        override suspend fun getName(): String {
+           return authService.getName()
+
 
         }
 
         override suspend fun isSignIn(): Boolean {
-            return auth.currentUser != null
+           return authService.isSignIn()
+
         }
 
 
         override suspend fun signIn( email: String, password: String,callback: LoginViewModel.ErrorHandler) {
             validator.validate(email,password,password)
 
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        callback.success()
-                    }
-                }
-                .addOnFailureListener {
-                    callback.map(it)
-                }
+            authService.signIn(email,password,callback)
+
 
         }
 
@@ -82,25 +64,8 @@ interface LoginRepository {
             callback: SignUpViewModel.ErrorHandler
         ) {
             validator.validate(email, password, repeatPass)
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val profileUpdate= userProfileChangeRequest {
-                            displayName = name
-                        }
-                        auth.currentUser!!.updateProfile(profileUpdate)
-                            .addOnCompleteListener{
-                                callback.success()
-                            }
-                            .addOnFailureListener {
-                                callback.map(it)
-                            }
-                    }
+            authService.createUser(name,email,password,callback)
 
-                }
-                .addOnFailureListener {
-                    callback.map(it)
-                }
         }
     }
 

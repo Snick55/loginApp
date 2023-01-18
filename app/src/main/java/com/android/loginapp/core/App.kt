@@ -1,6 +1,7 @@
 package com.android.loginapp.core
 
 import android.app.Application
+import com.android.loginapp.model.AuthService
 import com.android.loginapp.model.LoginRepository
 import com.android.loginapp.model.Validator
 import com.android.loginapp.presentation.profile.ProfileViewModel
@@ -22,7 +23,8 @@ import com.google.firebase.ktx.Firebase
 
         val auth = Firebase.auth
         val validator = Validator.Base()
-        val repository = LoginRepository.Base(auth, validator)
+        val authService = AuthService.Base(auth)
+        val repository = LoginRepository.Base(authService, validator)
 
         loginViewModel = LoginViewModel(repository)
         viewModel = SignUpViewModel(repository)

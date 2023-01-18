@@ -48,9 +48,9 @@ dependencies {
 
     implementation('androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1')
 
-
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
-
+    def coroutines_version = "1.5.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
     implementation platform('com.google.firebase:firebase-bom:31.1.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
