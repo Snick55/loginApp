@@ -5,6 +5,8 @@ import com.android.loginapp.model.AuthService
 import com.android.loginapp.model.LoginRepository
 import com.android.loginapp.model.Validator
 import com.android.loginapp.presentation.profile.ProfileViewModel
+import com.android.loginapp.presentation.signIn.LoginStateCommunication
+import com.android.loginapp.presentation.signIn.LoginSuccessCommunication
 import com.android.loginapp.presentation.signIn.LoginViewModel
 import com.android.loginapp.presentation.signUp.SignUpViewModel
 import com.android.loginapp.presentation.splash.SplashViewModel
@@ -25,8 +27,10 @@ import com.google.firebase.ktx.Firebase
         val validator = Validator.Base()
         val authService = AuthService.Base(auth)
         val repository = LoginRepository.Base(authService, validator)
+        val loginSuccessCommunication = LoginSuccessCommunication.Base()
+        val loginStateCommunication = LoginStateCommunication.Base()
 
-        loginViewModel = LoginViewModel(repository)
+        loginViewModel = LoginViewModel(repository,loginSuccessCommunication,loginStateCommunication)
         viewModel = SignUpViewModel(repository)
         profileViewModel = ProfileViewModel(repository)
         splashViewModel = SplashViewModel(repository)

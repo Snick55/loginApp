@@ -1,22 +1,25 @@
 package com.android.loginapp.model
 
+import com.android.loginapp.presentation.AuthCallback
 import com.android.loginapp.presentation.profile.SuccessRequestCallback
-import com.android.loginapp.presentation.signIn.LoginViewModel
-import com.android.loginapp.presentation.signUp.SignUpViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
 
 interface LoginRepository {
 
-    suspend fun changeName(name: String,callback: SuccessRequestCallback)
+    suspend fun changeName(name: String, callback: SuccessRequestCallback)
 
     suspend fun getName(): String
 
     suspend fun isSignIn(): Boolean
 
-    suspend fun signIn(email: String, password: String,callback: LoginViewModel.ErrorHandler)
+    suspend fun signIn(email: String, password: String, callback: AuthCallback)
 
-    suspend fun signUp(name: String, email: String, password: String, repeatPass: String,callback: SignUpViewModel.ErrorHandler)
+    suspend fun signUp(
+        name: String,
+        email: String,
+        password: String,
+        repeatPass: String,
+        callback: AuthCallback
+    )
 
     suspend fun signOut()
 
@@ -27,9 +30,8 @@ interface LoginRepository {
     ) : LoginRepository {
 
 
-        override suspend fun changeName(name: String,callback:SuccessRequestCallback) {
-
-            authService.changeName(name,callback)
+        override suspend fun changeName(name: String, callback: SuccessRequestCallback) {
+            authService.changeName(name, callback)
         }
 
         override suspend fun signOut() {
@@ -37,23 +39,21 @@ interface LoginRepository {
         }
 
         override suspend fun getName(): String {
-           return authService.getName()
-
-
+            return authService.getName()
         }
 
         override suspend fun isSignIn(): Boolean {
-           return authService.isSignIn()
-
+            return authService.isSignIn()
         }
 
 
-        override suspend fun signIn( email: String, password: String,callback: LoginViewModel.ErrorHandler) {
-            validator.validate(email,password,password)
-
-            authService.signIn(email,password,callback)
-
-
+        override suspend fun signIn(
+            email: String,
+            password: String,
+            callback: AuthCallback
+        ) {
+            validator.validate(email, password, password)
+            authService.signIn(email, password, callback)
         }
 
         override suspend fun signUp(
@@ -61,11 +61,10 @@ interface LoginRepository {
             email: String,
             password: String,
             repeatPass: String,
-            callback: SignUpViewModel.ErrorHandler
+            callback: AuthCallback
         ) {
             validator.validate(email, password, repeatPass)
-            authService.createUser(name,email,password,callback)
-
+            authService.createUser(name, email, password, callback)
         }
     }
 

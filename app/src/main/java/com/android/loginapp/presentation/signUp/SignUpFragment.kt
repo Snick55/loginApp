@@ -61,7 +61,6 @@ class SignUpFragment: Fragment() {
 
         binding.createAccountButton.setOnClickListener {
             with(binding){
-                // TODO: make validate on password
                 val email = binding.emailEditText.text.toString()
                 val password = passwordEditText.text.toString()
                 val name = usernameEditText.text.toString()

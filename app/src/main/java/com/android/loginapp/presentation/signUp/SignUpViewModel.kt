@@ -7,12 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.loginapp.R
 import com.android.loginapp.model.*
+import com.android.loginapp.presentation.AuthCallback
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class SignUpViewModel(
     private val repository: LoginRepository
-) : ViewModel() {
+) : ViewModel(),AuthCallback {
 
     private val _successLiveData = MutableLiveData(false)
     val successLiveData: LiveData<Boolean> = _successLiveData
@@ -20,30 +21,13 @@ class SignUpViewModel(
     private val _state = MutableLiveData(State())
     val state: LiveData<State> = _state
 
-    private val callback = object : ErrorHandler {
-        override fun map(e: Exception) {
-            when (e) {
-                is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> {
-                    handleInvalidEmailException()
-                    hideProgress()
-                }
-            }
-
-        }
-
-        override fun success() {
-            _successLiveData.value = true
-            hideProgress()
-
-        }
-    }
 
 
     fun signUp(name:String,email: String, password: String, repeatPass: String) =
         viewModelScope.launch {
             showProgress()
             try {
-                repository.signUp(name,email, password, repeatPass, callback)
+                repository.signUp(name,email, password, repeatPass, this@SignUpViewModel)
             } catch (e: PasswordMismatchException) {
                 handlePasswordMismatch()
             } catch (e: EmptyFieldException) {
@@ -80,12 +64,37 @@ class SignUpViewModel(
         hideProgress()
     }
 
+    private fun handleAccountAlreadyExist(){
+        _state.value = _state.value?.copy(emailErrorMessageRes = R.string.account_already_exist)
+    }
+
     private fun showProgress() {
         _state.value = State(signUpInProgress = true)
     }
 
     private fun hideProgress() {
         _state.value = _state.value?.copy(signUpInProgress = false)
+    }
+
+
+    override fun map(e: Exception) {
+        when (e) {
+            is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> {
+                handleInvalidEmailException()
+                hideProgress()
+            }
+           is com.google.firebase.auth.FirebaseAuthUserCollisionException -> handleAccountAlreadyExist()
+        }
+    }
+
+    override fun success() {
+        _successLiveData.value = true
+        hideProgress()
+    }
+
+    fun stateFalse()= viewModelScope.launch {
+        _successLiveData.value = false
+        repository.signOut()
     }
 
     data class State(
@@ -104,14 +113,6 @@ class SignUpViewModel(
         const val NO_ERROR_MESSAGE = 0
     }
 
-    interface ErrorHandler {
-        fun map(e: Exception)
-        fun success()
-    }
 
-     fun stateFalse()= viewModelScope.launch {
-        _successLiveData.value = false
-         repository.signOut()
-    }
 
 }

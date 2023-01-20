@@ -1,6 +1,7 @@
 package com.android.loginapp.presentation.signIn
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ class LoginFragment: Fragment() {
 
 
     private lateinit var binding: LoginFragmentBinding
+    private lateinit var viewModel: LoginViewModel
 
 
     override fun onCreateView(
@@ -33,11 +35,10 @@ class LoginFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       val viewModel= (requireActivity().applicationContext as App).loginViewModel
+       viewModel= (requireActivity().applicationContext as App).loginViewModel
 
-        viewModel.successLiveData.observe(viewLifecycleOwner){
+        viewModel.observeSuccess(viewLifecycleOwner){
             if (it){
-
                 val fragment = FragmentProfile()
                 parentFragmentManager.beginTransaction().replace(R.id.fragment_container,fragment)
                     .remove(this)
@@ -46,7 +47,7 @@ class LoginFragment: Fragment() {
             }
         }
 
-        viewModel.state.observe(viewLifecycleOwner){state->
+        viewModel.observeState(viewLifecycleOwner){state->
             binding.emailTextInput.isEnabled = state.enableViews
             binding.passwordTextInput.isEnabled = state.enableViews
             binding.signUpButton.isEnabled = state.enableViews
@@ -88,6 +89,8 @@ class LoginFragment: Fragment() {
             input.isErrorEnabled = true
         }
     }
+
+
 
 
     companion object{

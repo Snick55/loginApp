@@ -1,8 +1,7 @@
 package com.android.loginapp.model
 
+import com.android.loginapp.presentation.AuthCallback
 import com.android.loginapp.presentation.profile.SuccessRequestCallback
-import com.android.loginapp.presentation.signIn.LoginViewModel
-import com.android.loginapp.presentation.signUp.SignUpViewModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import java.lang.RuntimeException
@@ -128,7 +127,7 @@ class LoginRepositoryTest {
         val email = "ban34505@mail.ru"
         val password = "123456"
         var actual: Any? = null
-        repository.signIn(email, password, object : LoginViewModel.ErrorHandler {
+        repository.signIn(email, password, object : AuthCallback {
             override fun map(e: Exception) {
                 actual = e
             }
@@ -154,7 +153,7 @@ class LoginRepositoryTest {
         val email = "ban34505@mail.ru"
         val password = "123456"
         var actual: Any? = null
-        repository.signIn(email, password, object : LoginViewModel.ErrorHandler {
+        repository.signIn(email, password, object : AuthCallback {
             override fun map(e: Exception) {
                 actual = e
             }
@@ -186,7 +185,7 @@ class LoginRepositoryTest {
         assertEquals(expectedIsSignIn,actualBeforeSignIn)
 
         var actualAfterSignIn: Any? = null
-        repository.signIn(email, password, object : LoginViewModel.ErrorHandler {
+        repository.signIn(email, password, object : AuthCallback {
             override fun map(e: Exception) {
                 actualAfterSignIn = e
             }
@@ -223,8 +222,9 @@ class LoginRepositoryTest {
         val name = "Nick"
         var actual: Any? = null
 
+
         repository.signUp(name = name, email = email, password = password, repeatPass = password,
-            object : SignUpViewModel.ErrorHandler {
+            object : AuthCallback {
                 override fun map(e: Exception) {
                     actual = e
                 }
@@ -255,7 +255,7 @@ class LoginRepositoryTest {
         var actual: Any? = null
 
         repository.signUp(name = name, email = email, password = password, repeatPass = password,
-            object : SignUpViewModel.ErrorHandler {
+            object : AuthCallback {
                 override fun map(e: Exception) {
                     actual = e
                 }
@@ -312,7 +312,7 @@ class LoginRepositoryTest {
         override suspend fun signIn(
             email: String,
             password: String,
-            callback: LoginViewModel.ErrorHandler
+            callback: AuthCallback
         ) {
             if (isSuccess) {
                 callback.success()
@@ -325,7 +325,7 @@ class LoginRepositoryTest {
             name: String,
             email: String,
             password: String,
-            callback: SignUpViewModel.ErrorHandler
+            callback: AuthCallback
         ) {
             if (isSuccess) {
                 callback.success()

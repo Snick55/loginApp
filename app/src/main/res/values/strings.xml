@@ -18,4 +18,6 @@
     <string name="field_repeat_password">Repeat password</string>
     <string name="action_create_account">Create account</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="someting_went_wrong">something went wrong</string>
+    <string name="account_already_exist">Account already exist</string>
 </resources>

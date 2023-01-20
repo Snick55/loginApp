@@ -19,7 +19,7 @@ class SplashViewModel(
 
     fun isSignIn() = viewModelScope.launch {
         try {
-            delay(3000)
+            delay(2000)
             _isSignIn.value = repository.isSignIn()
         } catch (e: Exception) {
             _isSignIn.value = false

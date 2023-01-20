@@ -1,11 +1,13 @@
 package com.android.loginapp.model
 
+import android.util.Log
+import com.android.loginapp.presentation.AuthCallback
 import com.android.loginapp.presentation.profile.SuccessRequestCallback
-import com.android.loginapp.presentation.signIn.LoginViewModel
-import com.android.loginapp.presentation.signUp.SignUpViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 interface AuthService {
 
@@ -13,13 +15,13 @@ interface AuthService {
     suspend fun getName(): String
     suspend fun isSignIn(): Boolean
     suspend fun signOut()
-    suspend fun signIn(email: String, password: String, callback: LoginViewModel.ErrorHandler)
+    suspend fun signIn(email: String, password: String, callback: AuthCallback)
 
     suspend fun createUser(
         name: String,
         email: String,
         password: String,
-        callback: SignUpViewModel.ErrorHandler
+        callback: AuthCallback
     )
 
     class Base(private val auth: FirebaseAuth) : AuthService {
@@ -30,68 +32,75 @@ interface AuthService {
             val request = userProfileChangeRequest {
                 displayName = name
             }
-            auth.currentUser!!.updateProfile(request)
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        callback.success()
+            withContext(Dispatchers.IO) {
+                auth.currentUser!!.updateProfile(request)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            callback.success()
+                        }
                     }
-                }
+            }
         }
 
-        override suspend fun getName(): String {
+        override suspend fun getName(): String = withContext(Dispatchers.IO) {
             val currentUser = auth.currentUser
-            return currentUser?.displayName ?: ""
+            return@withContext currentUser?.displayName ?: ""
         }
 
-        override suspend fun isSignIn(): Boolean {
-            return auth.currentUser != null
-        }
+        override suspend fun isSignIn(): Boolean = withContext(Dispatchers.IO) {
+                return@withContext auth.currentUser != null
+            }
 
         override suspend fun signOut() {
-            auth.signOut()
+            withContext(Dispatchers.IO) {
+                auth.signOut()
+            }
         }
 
         override suspend fun signIn(
             email: String,
             password: String,
-            callback: LoginViewModel.ErrorHandler
+            callback: AuthCallback
         ) {
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        callback.success()
+            withContext(Dispatchers.IO) { // TODO: fix hardcode dispatchers
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            callback.success()
+                        }
                     }
-                }
-                .addOnFailureListener {
-                    callback.map(it)
-                }
+                    .addOnFailureListener {
+                        callback.map(it)
+                    }
+            }
         }
 
         override suspend fun createUser(
             name: String,
             email: String,
             password: String,
-            callback: SignUpViewModel.ErrorHandler
+            callback: AuthCallback
         ) {
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val profileUpdate= userProfileChangeRequest {
-                            displayName = name
-                        }
-                        auth.currentUser!!.updateProfile(profileUpdate)
-                            .addOnCompleteListener{
-                                callback.success()
+            withContext(Dispatchers.IO) {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val profileUpdate = userProfileChangeRequest {
+                                displayName = name
                             }
-                            .addOnFailureListener {
-                                callback.map(it)
-                            }
+                            auth.currentUser!!.updateProfile(profileUpdate)
+                                .addOnCompleteListener {
+                                    callback.success()
+                                }
+                                .addOnFailureListener {
+                                    callback.map(it)
+                                }
+                        }else if(task.exception != null) callback.map(task.exception!!)
                     }
-
-                }
-                .addOnFailureListener {
-                    callback.map(it)
-                }
+                    .addOnFailureListener {
+                        callback.map(it)
+                    }
+            }
         }
     }
 }
