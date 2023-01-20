@@ -56,13 +56,13 @@ class LoginRepositoryTest {
             testValidator
         )
         val user = auth.currentUser
-        val expectedUser = "test"
+        val expectedUser = "default"
 
         assertEquals(expectedUser, user)
 
         repository.signOut()
-        val actual = auth.currentUser
-        val expected = null
+        val actual = auth.isSignIn
+        val expected = false
 
         assertEquals(expected, actual)
     }
@@ -78,7 +78,7 @@ class LoginRepositoryTest {
         )
         val name = "name"
         val user = auth.currentUser
-        val expectedUser = "test"
+        val expectedUser = "default"
 
         assertEquals(expectedUser, user)
 
@@ -102,7 +102,7 @@ class LoginRepositoryTest {
         )
         val name = "name"
         val user = auth.currentUser
-        val expectedUser = "test"
+        val expectedUser = "default"
 
         assertEquals(expectedUser, user)
 
@@ -165,18 +165,110 @@ class LoginRepositoryTest {
         })
         val expected = exception
 
+        assertEquals(expected, actual)
+    }
+
+
+    @Test
+    fun `testing sign out method after sign in`(): Unit = runBlocking {
+        val testValidator = TestValidator()
+        val auth = TestFireBaseAuth(isSuccess = true,exception)
+        val repository = LoginRepository.Base(
+            auth,
+            testValidator
+        )
+        val email = "ban34505@mail.ru"
+        val password = "123456"
+
+        val actualBeforeSignIn = auth.isSignIn
+        val expectedIsSignIn = false
+
+        assertEquals(expectedIsSignIn,actualBeforeSignIn)
+
+        var actualAfterSignIn: Any? = null
+        repository.signIn(email, password, object : LoginViewModel.ErrorHandler {
+            override fun map(e: Exception) {
+                actualAfterSignIn = e
+            }
+
+            override fun success() {
+                actualAfterSignIn = true
+            }
+        })
+        val expectedAfterSignIn = true
+        assertEquals(expectedAfterSignIn, actualAfterSignIn)
+
+        repository.signOut()
+
+        val actual = auth.isSignIn
+        val expected = false
+
+        assertEquals(expected, actual)
+
+    }
+
+
+
+    @Test
+    fun `testing sign up method with success conditionals`(): Unit = runBlocking {
+        val testValidator = TestValidator()
+
+        val auth = TestFireBaseAuth(isSuccess = true,exception)
+        val repository = LoginRepository.Base(
+            auth,
+            testValidator
+        )
+        val email = "ban34505@mail.ru"
+        val password = "123456"
+        val name = "Nick"
+        var actual: Any? = null
+
+        repository.signUp(name = name, email = email, password = password, repeatPass = password,
+            object : SignUpViewModel.ErrorHandler {
+                override fun map(e: Exception) {
+                    actual = e
+                }
+
+                override fun success() {
+                    actual = true
+                }
+            })
+
+        val expected = true
 
         assertEquals(expected, actual)
     }
 
 
+    @Test
+    fun `testing sign up method with error conditionals`(): Unit = runBlocking {
+        val testValidator = TestValidator()
 
+        val auth = TestFireBaseAuth(isSuccess = false,exception)
+        val repository = LoginRepository.Base(
+            auth,
+            testValidator
+        )
+        val email = "ban34505@mail.ru"
+        val password = "123456"
+        val name = "Nick"
+        var actual: Any? = null
 
+        repository.signUp(name = name, email = email, password = password, repeatPass = password,
+            object : SignUpViewModel.ErrorHandler {
+                override fun map(e: Exception) {
+                    actual = e
+                }
 
+                override fun success() {
+                    actual = true
+                }
+            })
 
+        val expected = exception
 
-
-
+        assertEquals(expected, actual)
+    }
 
 
 
@@ -189,9 +281,9 @@ class LoginRepositoryTest {
         private val exception: RuntimeException
     ) : AuthService {
 
-        var currentUser: String = "test"
+        var currentUser: String = "default"
 
-        var isSignIn: Boolean = true
+        var isSignIn: Boolean = false
 
         override suspend fun changeName(
             name: String,
@@ -224,6 +316,7 @@ class LoginRepositoryTest {
         ) {
             if (isSuccess) {
                 callback.success()
+                currentUser = "success"
             } else
                 callback.map(exception)
         }
@@ -236,6 +329,7 @@ class LoginRepositoryTest {
         ) {
             if (isSuccess) {
                 callback.success()
+                currentUser = name
             } else callback.map(exception)
 
         }
