@@ -2,9 +2,8 @@ package com.android.loginapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.android.loginapp.core.App
-import com.android.loginapp.presentation.profile.FragmentProfile
-import com.android.loginapp.presentation.signIn.LoginFragment
+import com.android.loginapp.login.presentation.signIn.LoginFragment
+import com.android.loginapp.maps.presentation.MapsFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
 
             if (isSignIn) {
-                    val fragment = FragmentProfile()
+                    val fragment = MapsFragment()
                     supportFragmentManager.beginTransaction()
                         .add(R.id.fragment_container, fragment)
                         .commit()

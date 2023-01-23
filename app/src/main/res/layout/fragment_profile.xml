@@ -4,30 +4,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_gravity="center_horizontal"
-        android:textSize="36sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/signOut_button"
-        android:text="@string/sign_out"
-        android:layout_marginTop="150dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        app:cornerRadius="50dp"
-        />
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/change_name_button"
-        android:text="@string/change_name"
-        android:layout_marginTop="75dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="150dp"
-        app:cornerRadius="50dp"
-        android:layout_height="wrap_content"/>
+    <com.yandex.mapkit.mapview.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </FrameLayout>
