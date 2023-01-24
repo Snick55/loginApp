@@ -9,9 +9,11 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.android.loginapp.core.App
+import com.android.loginapp.databinding.ActivityMainBinding
 import com.android.loginapp.login.presentation.signIn.LoginFragment
 import com.android.loginapp.maps.MainViewModel
 import com.android.loginapp.maps.presentation.MapsFragment
@@ -20,19 +22,18 @@ import com.google.android.gms.location.LocationServices
 
 class MainActivity : AppCompatActivity() {
 
-   private lateinit  var  fusedLocationProviderClient : FusedLocationProviderClient
-
-   private lateinit var viewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var viewModel: MainViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel= (applicationContext as App).mainViewModel
-
-        fusedLocationProviderClient =LocationServices.getFusedLocationProviderClient(this)
+        viewModel = (applicationContext as App).mainViewModel
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getLocation()
-
 
 
 
@@ -56,6 +57,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
+
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -70,18 +74,23 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-    private fun requestPermissions(){
+    private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION),
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
             PERMISSION_ID
         )
     }
 
-    private fun isLocationEnabled(): Boolean{
+    private fun isLocationEnabled(): Boolean {
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
     }
 
 
@@ -91,39 +100,37 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == PERMISSION_ID){
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Log.d("TAG","You have the Permission")
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("TAG", "You have the Permission")
             }
         }
     }
 
 
     @SuppressLint("MissingPermission")
-    private fun getLocation(){
-        if (checkPermissions()){
-            if (isLocationEnabled()){
-                fusedLocationProviderClient.lastLocation.addOnCompleteListener {task->
+    private fun getLocation() {
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
                     val location: Location? = task.result
-                    if (location == null){
+                    if (location == null) {
                         Log.d("TAG", "LOCATION IS NULL")
-                    }else{
-                       val lat = location.latitude
+                    } else {
+                        val lat = location.latitude
                         val long = location.longitude
-                        viewModel.saveLocation(lat,long)
+                        viewModel.saveLocation(lat, long)
                     }
                 }
-            }else {
-                Toast.makeText(this,"Please Turn on Your device Location",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Please Turn on Your device Location", Toast.LENGTH_SHORT)
+                    .show()
             }
-        }else requestPermissions()
+        } else requestPermissions()
     }
 
 
-
-
-
-    companion object{
+    companion object {
         const val PERMISSION_ID = 100
     }
 }
