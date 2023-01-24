@@ -16,6 +16,7 @@ import com.android.loginapp.login.presentation.signUp.SignUpViewModel
 import com.android.loginapp.login.presentation.splash.SplashViewModel
 import com.android.loginapp.maps.MainViewModel
 import com.android.loginapp.maps.model.PreferencesManager
+import com.android.loginapp.maps.presentation.MapsViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.yandex.mapkit.MapKitFactory
@@ -29,6 +30,7 @@ import com.yandex.mapkit.MapKitFactory
     lateinit var loginViewModel: LoginViewModel
     lateinit var profileViewModel: ProfileViewModel
     lateinit var mainViewModel: MainViewModel
+    lateinit var mapsViewModel: MapsViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -52,6 +54,7 @@ import com.yandex.mapkit.MapKitFactory
         profileViewModel = ProfileViewModel(repository)
         splashViewModel = SplashViewModel(repository)
         mainViewModel= MainViewModel(sharedPreferencesManager)
+        mapsViewModel = MapsViewModel(sharedPreferencesManager,repository)
     }
 
      companion object{
