@@ -45,6 +45,7 @@ interface AuthService {
             return@withContext currentUser?.displayName ?: ""
         }
 
+
         override suspend fun isSignIn(): Boolean = withContext(Dispatchers.IO) {
                 return@withContext auth.currentUser != null
             }

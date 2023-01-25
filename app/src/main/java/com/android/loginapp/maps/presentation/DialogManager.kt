@@ -17,6 +17,7 @@ object DialogManager {
             dialog.dismiss()
         }
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE,"Cancel"){_,_ ->
+
             dialog.dismiss()
         }
         dialog.show()

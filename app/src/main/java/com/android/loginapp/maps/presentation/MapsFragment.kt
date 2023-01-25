@@ -76,6 +76,7 @@ class MapsFragment: Fragment() {
                 val dialogBuilder = AlertDialog.Builder(requireContext())
            DialogManager.changePass(dialogBuilder){
                viewModel.changeName(it)
+
             }
             }
         }
