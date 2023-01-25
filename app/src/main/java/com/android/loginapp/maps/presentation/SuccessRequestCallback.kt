@@ -1,4 +1,4 @@
-package com.android.loginapp.login.presentation.profile
+package com.android.loginapp.maps.presentation
 
 interface SuccessRequestCallback {
 

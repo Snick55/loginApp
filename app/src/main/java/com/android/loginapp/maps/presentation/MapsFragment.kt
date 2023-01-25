@@ -1,15 +1,15 @@
 package com.android.loginapp.maps.presentation
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.android.loginapp.R
 import com.android.loginapp.core.App
-import com.android.loginapp.databinding.ActivityMainBinding
 import com.android.loginapp.databinding.FragmentProfileBinding
 import com.android.loginapp.login.presentation.signIn.LoginFragment
-import com.android.loginapp.maps.MainViewModel
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -46,15 +46,21 @@ class MapsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (requireContext().applicationContext as App).mapsViewModel
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
-
         viewModel.getUsername()
         viewModel.currentName.observe(viewLifecycleOwner){
             binding.toolbar.title = it
         }
 
+        viewModel.getLocation()
 
-        binding.mapView.map.move(CameraPosition(Point(55.751574, 37.573856),11.0f, 0.0f, 0.0f),
-            Animation(Animation.Type.SMOOTH, 0F),null)
+
+
+
+        viewModel.currentLocation.observe(viewLifecycleOwner){
+            Log.d("TAG","location lat:${it.first},lon:${it.second}")
+            binding.mapView.map.move(CameraPosition(Point(it.first, it.second),15.0f, 0.0f, 0.0f),
+                Animation(Animation.Type.SMOOTH, 5F),null)
+        }
     }
 
 
@@ -65,6 +71,12 @@ class MapsFragment: Fragment() {
                 parentFragmentManager.beginTransaction().replace(R.id.fragment_container,LoginFragment())
                     .remove(this)
                     .commit()
+            }
+            R.id.change_name ->{
+                val dialogBuilder = AlertDialog.Builder(requireContext())
+           DialogManager.changePass(dialogBuilder){
+               viewModel.changeName(it)
+            }
             }
         }
         return true
@@ -78,6 +90,7 @@ class MapsFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
+
         MapKitFactory.getInstance().onStart();
       binding.mapView.onStart();
     }

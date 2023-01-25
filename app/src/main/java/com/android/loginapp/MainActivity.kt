@@ -33,7 +33,9 @@ class MainActivity : AppCompatActivity() {
         viewModel = (applicationContext as App).mainViewModel
         binding = ActivityMainBinding.inflate(layoutInflater)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        getLocation()
+        if (savedInstanceState == null){
+            getLocation()
+        }
 
 
 
@@ -55,7 +57,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
 
 
 
@@ -119,6 +120,7 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         val lat = location.latitude
                         val long = location.longitude
+                        Log.d("TAG","saving loc is ${lat},$long")
                         viewModel.saveLocation(lat, long)
                     }
                 }

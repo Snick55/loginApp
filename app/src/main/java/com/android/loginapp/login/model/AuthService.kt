@@ -1,7 +1,7 @@
 package com.android.loginapp.login.model
 
 import com.android.loginapp.login.presentation.AuthCallback
-import com.android.loginapp.login.presentation.profile.SuccessRequestCallback
+import com.android.loginapp.maps.presentation.SuccessRequestCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.Dispatchers

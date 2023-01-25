@@ -8,14 +8,7 @@ class MainViewModel(private val preferencesManager: PreferencesManager) : ViewMo
 
 
     fun saveLocation(lat: Double,lon: Double){
-        preferencesManager.saveLocation(LAT_KEY,lat)
-        preferencesManager.saveLocation(LON_KEY,lon)
-
+        preferencesManager.saveLocation(lat,lon)
     }
 
-
-    companion object{
-        const val LAT_KEY = "LAT_KEY"
-        const val LON_KEY = "LON_KEY"
-    }
 }

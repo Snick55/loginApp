@@ -9,13 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/purple_700"
-        app:title="@string/app_name"
-        app:titleTextColor="@color/white" />
+        app:title="@string/app_name" />
 
     <com.yandex.mapkit.mapview.MapView
         android:id="@+id/mapView"
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

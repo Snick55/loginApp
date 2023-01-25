@@ -6,7 +6,6 @@ import android.content.Context
 import com.android.loginapp.login.model.AuthService
 import com.android.loginapp.login.model.LoginRepository
 import com.android.loginapp.login.model.Validator
-import com.android.loginapp.login.presentation.profile.ProfileViewModel
 import com.android.loginapp.login.presentation.signIn.LoginStateCommunication
 import com.android.loginapp.login.presentation.signIn.LoginSuccessCommunication
 import com.android.loginapp.login.presentation.signIn.LoginViewModel
@@ -28,7 +27,6 @@ import com.yandex.mapkit.MapKitFactory
     lateinit var viewModel: SignUpViewModel
     lateinit var splashViewModel: SplashViewModel
     lateinit var loginViewModel: LoginViewModel
-    lateinit var profileViewModel: ProfileViewModel
     lateinit var mainViewModel: MainViewModel
     lateinit var mapsViewModel: MapsViewModel
 
@@ -51,7 +49,6 @@ import com.yandex.mapkit.MapKitFactory
 
         loginViewModel = LoginViewModel(repository,loginSuccessCommunication,loginStateCommunication)
         viewModel = SignUpViewModel(repository,signUpSuccessCommunication,signUpStateCommunication)
-        profileViewModel = ProfileViewModel(repository)
         splashViewModel = SplashViewModel(repository)
         mainViewModel= MainViewModel(sharedPreferencesManager)
         mapsViewModel = MapsViewModel(sharedPreferencesManager,repository)
