@@ -9,7 +9,6 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.android.loginapp.core.App
@@ -120,19 +119,18 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         val lat = location.latitude
                         val long = location.longitude
-                        Log.d("TAG","saving loc is ${lat},$long")
                         viewModel.saveLocation(lat, long)
                     }
                 }
             } else {
-                Toast.makeText(this, "Please Turn on Your device Location", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Please Turn on Your device Location", Toast.LENGTH_LONG)
                     .show()
             }
         } else requestPermissions()
     }
 
 
-    companion object {
+  private  companion object {
         const val PERMISSION_ID = 100
     }
 }

@@ -2,7 +2,6 @@ package com.android.loginapp.maps.presentation
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -15,7 +14,7 @@ import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 
-class MapsFragment: Fragment() {
+class MapsFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var viewModel: MapsViewModel
@@ -32,13 +31,13 @@ class MapsFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(inflater,container,false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu,menu)
+        inflater.inflate(R.menu.main_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -47,37 +46,36 @@ class MapsFragment: Fragment() {
         viewModel = (requireContext().applicationContext as App).mapsViewModel
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
         viewModel.getUsername()
-        viewModel.currentName.observe(viewLifecycleOwner){
-            binding.toolbar.title = it
-        }
-
         viewModel.getLocation()
 
-
-
-
-        viewModel.currentLocation.observe(viewLifecycleOwner){
-            Log.d("TAG","location lat:${it.first},lon:${it.second}")
-            binding.mapView.map.move(CameraPosition(Point(it.first, it.second),15.0f, 0.0f, 0.0f),
-                Animation(Animation.Type.SMOOTH, 5F),null)
+        viewModel.currentName.observe(viewLifecycleOwner) {
+            binding.toolbar.title = it
         }
+        viewModel.currentLocation.observe(viewLifecycleOwner) {
+            binding.mapView.map.move(
+                CameraPosition(Point(it.first, it.second), 15.0f, 0.0f, 0.0f),
+                Animation(Animation.Type.SMOOTH, 1.5F), null
+            )
+        }
+
+        binding.findMeButton.setOnClickListener { viewModel.getLocation() }
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.signOut -> {
                 viewModel.signOut()
-                parentFragmentManager.beginTransaction().replace(R.id.fragment_container,LoginFragment())
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, LoginFragment())
                     .remove(this)
                     .commit()
             }
-            R.id.change_name ->{
+            R.id.change_name -> {
                 val dialogBuilder = AlertDialog.Builder(requireContext())
-           DialogManager.changePass(dialogBuilder){
-               viewModel.changeName(it)
-
-            }
+                DialogManager.changePass(dialogBuilder) {
+                    viewModel.changeName(it)
+                }
             }
         }
         return true
@@ -91,11 +89,7 @@ class MapsFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
-
-        MapKitFactory.getInstance().onStart();
-      binding.mapView.onStart();
+        MapKitFactory.getInstance().onStart()
+        binding.mapView.onStart()
     }
-
-
-
 }

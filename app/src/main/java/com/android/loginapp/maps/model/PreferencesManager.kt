@@ -27,7 +27,7 @@ interface PreferencesManager {
         }
     }
 
-    companion object {
+   private companion object {
         private const val LAT_KEY = "LAT_KEY"
         private const val LON_KEY = "LON_KEY"
     }
