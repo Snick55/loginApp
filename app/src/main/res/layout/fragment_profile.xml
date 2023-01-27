@@ -17,6 +17,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+
+        <ImageButton
+            android:layout_marginTop="75dp"
+            android:layout_marginStart="10dp"
+            android:id="@+id/traffic_button"
+            android:background="@null"
+            android:src="@drawable/ic_traffic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
     <ImageButton
         android:id="@+id/find_me_button"
         android:background="@null"
