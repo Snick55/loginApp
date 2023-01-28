@@ -53,10 +53,10 @@ class MapsFragment : Fragment() {
         viewModel.getUsername()
         viewModel.getLocation()
 
-        viewModel.currentName.observe(viewLifecycleOwner) {
+        viewModel.observeName(viewLifecycleOwner) {
             binding.toolbar.title = it
         }
-        viewModel.currentLocation.observe(viewLifecycleOwner) {
+        viewModel.observeLocation(viewLifecycleOwner) {
             binding.mapView.map.move(
                 CameraPosition(Point(it.first, it.second), 15.0f, 0.0f, 0.0f),
                 Animation(Animation.Type.SMOOTH, 1.5F), null
@@ -66,10 +66,12 @@ class MapsFragment : Fragment() {
         var isTrafficActive = false
         binding.findMeButton.setOnClickListener { viewModel.getLocation() }
         binding.trafficButton.setOnClickListener {
-            if (isTrafficActive)
+            if (isTrafficActive) {
                 it.setBackgroundResource(R.drawable.ic_traffic)
-            else
-                it.setBackgroundResource(R.drawable.ic_traffic_green)
+            }
+            else {
+                binding.trafficButton.setBackgroundResource(R.drawable.ic_traffic_green)
+            }
             isTrafficActive = !isTrafficActive
             viewModel.traffic(traffic)
 

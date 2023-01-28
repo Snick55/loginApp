@@ -15,6 +15,8 @@ import com.android.loginapp.login.presentation.signUp.SignUpViewModel
 import com.android.loginapp.login.presentation.splash.SplashViewModel
 import com.android.loginapp.maps.MainViewModel
 import com.android.loginapp.maps.model.PreferencesManager
+import com.android.loginapp.maps.presentation.CurrentNameCommunication
+import com.android.loginapp.maps.presentation.LocationCommunication
 import com.android.loginapp.maps.presentation.MapsViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -44,6 +46,8 @@ import com.yandex.mapkit.MapKitFactory
         val loginStateCommunication = LoginStateCommunication.Base()
         val signUpSuccessCommunication = SignUpSuccessCommunication.Base()
         val signUpStateCommunication = SignUpStateCommunication.Base()
+        val currentNameCommunication = CurrentNameCommunication.Base()
+        val locationCommunication = LocationCommunication.Base()
         val sharedPreferences = getSharedPreferences(APP_PREF,Context.MODE_PRIVATE)
         val sharedPreferencesManager = PreferencesManager.Base(sharedPreferences)
 
@@ -51,7 +55,7 @@ import com.yandex.mapkit.MapKitFactory
         viewModel = SignUpViewModel(repository,signUpSuccessCommunication,signUpStateCommunication)
         splashViewModel = SplashViewModel(repository)
         mainViewModel= MainViewModel(sharedPreferencesManager)
-        mapsViewModel = MapsViewModel(sharedPreferencesManager,repository)
+        mapsViewModel = MapsViewModel(sharedPreferencesManager,repository,currentNameCommunication,locationCommunication)
     }
 
      companion object{

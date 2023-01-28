@@ -25,8 +25,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="75dp"
         android:background="@null"
-        android:src="@drawable/ic_traffic"
-         />
+        android:src="@drawable/ic_traffic" />
 
 
     <ImageButton
