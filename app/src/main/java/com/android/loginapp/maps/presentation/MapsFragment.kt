@@ -66,15 +66,13 @@ class MapsFragment : Fragment() {
         var isTrafficActive = false
         binding.findMeButton.setOnClickListener { viewModel.getLocation() }
         binding.trafficButton.setOnClickListener {
-            it.setBackgroundResource(R.drawable.ic_traffic_green)
-            if (!isTrafficActive) {
-                traffic.isTrafficVisible = true
-                isTrafficActive = !isTrafficActive
-            } else {
+            if (isTrafficActive)
                 it.setBackgroundResource(R.drawable.ic_traffic)
-                traffic.isTrafficVisible = false
-                isTrafficActive = !isTrafficActive
-            }
+            else
+                it.setBackgroundResource(R.drawable.ic_traffic_green)
+            isTrafficActive = !isTrafficActive
+            viewModel.traffic(traffic)
+
         }
     }
 

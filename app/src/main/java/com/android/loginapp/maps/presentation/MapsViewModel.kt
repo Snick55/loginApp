@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.loginapp.R
 import com.android.loginapp.login.model.LoginRepository
 import com.android.loginapp.maps.model.PreferencesManager
+import com.yandex.mapkit.traffic.TrafficLayer
 import kotlinx.coroutines.launch
 
 class MapsViewModel(
@@ -15,6 +17,8 @@ class MapsViewModel(
 
     private val _currentName = MutableLiveData<String>()
     val currentName = _currentName
+
+    private  var isTrafficActive = false
 
 
     private val _currentLocation = MutableLiveData<Pair<Double, Double>>()
@@ -42,6 +46,16 @@ class MapsViewModel(
         val lat = location.first.toDouble()
         val lon = location.second.toDouble()
         _currentLocation.value = Pair(lat, lon)
+    }
+
+    fun traffic(trafficLayer: TrafficLayer){
+        if (!isTrafficActive) {
+            trafficLayer.isTrafficVisible = true
+            isTrafficActive = !isTrafficActive
+        } else {
+            trafficLayer.isTrafficVisible = false
+            isTrafficActive = !isTrafficActive
+        }
     }
 
 
