@@ -9,7 +9,6 @@ class ValidatorTest {
     private val emptyPassFieldException = EmptyFieldException(Field.PASSWORD)
     private val emptyRepeatPassFieldException = EmptyFieldException(Field.PASSWORD)
     private val notEnoughCharsException = NotEnoughCharsException()
-
     private val mismatchException = PasswordMismatchException()
 
     @Test

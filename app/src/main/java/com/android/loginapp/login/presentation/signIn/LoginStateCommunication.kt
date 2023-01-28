@@ -58,6 +58,7 @@ interface LoginStateCommunication {
 
         private fun handleGenericException(){
             state.value = state.value?.copy(emailErrorMessageRes = R.string.someting_went_wrong)
+            hideProgress()
         }
 
 

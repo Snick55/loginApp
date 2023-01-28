@@ -12,6 +12,9 @@ class LoginViewModel(
     private val stateCommunication: LoginStateCommunication
 ) : ViewModel(),AuthCallback {
 
+
+
+
     fun signIn(email: String, password: String) = viewModelScope.launch {
         stateCommunication.showProgress()
         try {
@@ -30,6 +33,10 @@ class LoginViewModel(
         loginCommunication.observe(owner, observer)
     }
 
+    fun observeState(owner: LifecycleOwner,observer: Observer<LoginStateCommunication.State>){
+        stateCommunication.observe(owner, observer)
+    }
+
     override fun map(e: Exception) {
         stateCommunication.map(e)
     }
@@ -39,7 +46,9 @@ class LoginViewModel(
         stateCommunication.hideProgress()
     }
 
-    fun observeState(owner: LifecycleOwner,observer: Observer<LoginStateCommunication.State>){
-        stateCommunication.observe(owner, observer)
-    }
+
+
+
+
+
 }
