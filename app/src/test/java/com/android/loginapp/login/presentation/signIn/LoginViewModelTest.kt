@@ -14,6 +14,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.lang.Exception
+import java.net.UnknownHostException
 
 class LoginViewModelTest {
 
@@ -114,7 +115,77 @@ class LoginViewModelTest {
         assertEquals(expected, actual)
     }
 
-    inner class LoginSuccessCommunicationTest : LoginSuccessCommunication {
+
+
+    @Test
+    fun `testing sign in method with FirebaseInvalidUser error conditionals`() = runBlocking {
+        val loginSuccessCommunication = LoginSuccessCommunicationTest()
+        val stateCommunication = LoginStateCommunicationTest()
+        val exception = FirebaseInvalidUser()
+        val repository = RepositoryTest(isSuccess = false, exception = exception)
+        val viewModel = LoginViewModel(repository, loginSuccessCommunication, stateCommunication)
+        val email = "email@gmail.com"
+        val password = "123456"
+        async(Dispatchers.Main) {
+            viewModel.signIn(email, password)
+        }.await()
+        val actual = stateCommunication.state.emailErrorMessageRes
+        val expected = 2
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `testing sign in method with FirebaseAuthInvalidCredentials error conditionals`() = runBlocking {
+        val loginSuccessCommunication = LoginSuccessCommunicationTest()
+        val stateCommunication = LoginStateCommunicationTest()
+        val exception = FirebaseAuthInvalidCredentials()
+        val repository = RepositoryTest(isSuccess = false, exception = exception)
+        val viewModel = LoginViewModel(repository, loginSuccessCommunication, stateCommunication)
+        val email = "email@gmail.com"
+        val password = "123456"
+        async(Dispatchers.Main) {
+            viewModel.signIn(email, password)
+        }.await()
+        val actual = stateCommunication.state.emailErrorMessageRes
+        val expected = 4
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `testing sign in method with FirebaseAuthUserCollision error conditionals`() = runBlocking {
+        val loginSuccessCommunication = LoginSuccessCommunicationTest()
+        val stateCommunication = LoginStateCommunicationTest()
+        val exception = FirebaseAuthUserCollision()
+        val repository = RepositoryTest(isSuccess = false, exception = exception)
+        val viewModel = LoginViewModel(repository, loginSuccessCommunication, stateCommunication)
+        val email = "email@gmail.com"
+        val password = "123456"
+        async(Dispatchers.Main) {
+            viewModel.signIn(email, password)
+        }.await()
+        val actual = stateCommunication.state.emailErrorMessageRes
+        val expected = 1
+        assertEquals(expected, actual)
+    }
+
+  @Test
+    fun `testing sign in method with GenericException error conditionals`() = runBlocking {
+        val loginSuccessCommunication = LoginSuccessCommunicationTest()
+        val stateCommunication = LoginStateCommunicationTest()
+        val exception = UnknownHostException()
+        val repository = RepositoryTest(isSuccess = false, exception = exception)
+        val viewModel = LoginViewModel(repository, loginSuccessCommunication, stateCommunication)
+        val email = "email@gmail.com"
+        val password = "123456"
+        async(Dispatchers.Main) {
+            viewModel.signIn(email, password)
+        }.await()
+        val actual = stateCommunication.state.emailErrorMessageRes
+        val expected = 3
+        assertEquals(expected, actual)
+    }
+
+     class LoginSuccessCommunicationTest : LoginSuccessCommunication {
 
         var liveData = false
 
@@ -136,13 +207,13 @@ class LoginViewModelTest {
             when (e) {
                 is EmptyFieldException -> handleEmptyFieldError(e)
                 is NotEnoughCharsException -> handleNotEnoughCharsException()
-                is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> {
+                is FirebaseAuthInvalidCredentials -> {
                     handleInvalidEmailException()
                 }
-                is com.google.firebase.auth.FirebaseAuthInvalidUserException -> {
+                is FirebaseInvalidUser -> {
                     handleInvalidUserException()
                 }
-                is com.google.firebase.auth.FirebaseAuthUserCollisionException -> handleAccountAlreadyExist()
+                is FirebaseAuthUserCollision -> handleAccountAlreadyExist()
                 else -> handleGenericException()
             }
         }
@@ -212,7 +283,7 @@ class LoginViewModelTest {
 
     }
 
-    inner class RepositoryTest(val isSuccess: Boolean = true, val exception: Exception) :
+     class RepositoryTest(val isSuccess: Boolean = true, val exception: Exception) :
         LoginRepository {
 
         override suspend fun changeName(name: String, callback: SuccessRequestCallback) {
@@ -250,5 +321,9 @@ class LoginViewModelTest {
 
         }
     }
+
+    class FirebaseInvalidUser: Exception()
+    class FirebaseAuthUserCollision: Exception()
+    class FirebaseAuthInvalidCredentials: Exception()
 
 }
