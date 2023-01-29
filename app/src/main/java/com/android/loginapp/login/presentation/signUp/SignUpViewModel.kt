@@ -43,8 +43,4 @@ class SignUpViewModel(
     fun observeState(owner: LifecycleOwner,observer: Observer<SignUpStateCommunication.State>){
         stateCommunication.observe(owner, observer)
     }
-
-
-
-
 }
