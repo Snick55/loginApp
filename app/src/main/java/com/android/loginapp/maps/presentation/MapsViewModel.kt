@@ -43,13 +43,8 @@ class MapsViewModel(
     }
 
     fun traffic(trafficLayer: TrafficLayer){
-        if (!isTrafficActive) {
-            trafficLayer.isTrafficVisible = true
-            isTrafficActive = !isTrafficActive
-        } else {
-            trafficLayer.isTrafficVisible = false
-            isTrafficActive = !isTrafficActive
-        }
+        trafficLayer.isTrafficVisible = !isTrafficActive
+        isTrafficActive = !isTrafficActive
     }
 
     fun observeName(owner: LifecycleOwner, observer: Observer<String>){
